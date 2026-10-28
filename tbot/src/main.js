@@ -1,5 +1,6 @@
 const TelegramBot = require('node-telegram-bot-api')
 const dateFormat = require('dateformat')
+const { setupBotAdCleaner } = require('./bot_ad_cleaner')
 
 const token = process.env.TG_BOT_API_TOKEN
 
@@ -13,6 +14,14 @@ class Logger {
 
   info(text) {
     text.split("\n").forEach(string => console.log(`${this.getTimeString()}: ${string}`));
+  }
+
+  warn(text) {
+    text.split("\n").forEach(string => console.warn(`${this.getTimeString()}: ${string}`));
+  }
+
+  error(text) {
+    text.split("\n").forEach(string => console.error(`${this.getTimeString()}: ${string}`));
   }
 
 }
@@ -89,6 +98,7 @@ async function main() {
   bot.on("channel_post", acleaner.handleMessage.bind(acleaner))
   bot.on("message", acleaner.handleMessage.bind(acleaner))
 
+  setupBotAdCleaner({ bot, logger })
 
   logger.info("started")
 }
